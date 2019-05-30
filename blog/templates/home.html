@@ -1,0 +1,77 @@
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'new' %}">글쓰기</a><!--  home에서 글쓸 수 있게 글쓰기 클릭하면 new로 ㄱㄱ -->
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dropdown
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'portfolio' %}">portfolio</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+            </nav>
+<!-- pagenator로 자른 덩어리 속 객체를 보여줌. -->
+            {% for blog in posts %}
+            <div class="container">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{blog.title}}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{blog.pub_date}}</h6>
+                            <p class="card-text">{{blog.summary}}</p>
+
+                            <a href="{% url 'detail' blog.id %}" class="card-link">...more</a>
+                            <a href="{% url 'edit' blog.id %}" class="card-link">수정하기</a>
+                            <a href="{% url 'delete' blog.id %}" class="card-link">삭제</a>
+                        </div>
+                        </div><br>
+            </div>
+            {%endfor%}
+
+            <div class="container">
+                {%if posts.has_previous%}
+                    <a href="?page=1">First</a>
+                    <a href="?page={{posts.previous_page_number}}">Previous</a>
+                {%endif%}
+<!--  -->
+                <span>{{posts.number}}</span>
+                <span>of</span>
+                <span>{{posts.paginator.num_pages}}</span>
+<!-- 현재 page 번호, 몇 개 게시글로 되었는지 알려줌 e.g.2 of 5 -->
+                {%if posts.has_next%}
+                    <a href="?page={{posts.next_page_number}}">Next</a>
+                    <a href="?page={{posts.paginator.num_pages}}">Last</a>
+                {%endif%}
+                <!-- 다음page번호가 있으면 현재에서 다음 page로 갈 수 있게, 마지막이면 전체 pagenator로  -->
+            </div>
+</body>
