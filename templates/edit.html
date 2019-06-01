@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+{% block body %}
+<body>
+    <br>
+            <div class="container">
+                <form action="{% url 'edit' blog.id %}" method='POST'> 
+                    {% csrf_token %} <!--사용자가 자신의 의도와는 다르 게 공격자의 의도대로 바뀌는 거를 방지하려고 발행한 토큰. 보안상의 목적 -->
+                    <h4>제목: </h4>
+                    <input type="text" name="title" value="{{ blog.title }}">
+                    <br>
+                    <br>
+                    <h4>본문: </h4>
+                    <textarea col=40 rows=10 name="body">{{blog.body}}</textarea>
+                    <br>
+                    <br>
+                    <input class="btn btn-dark" type="submit" value="제출하기">
+                </form>
+            </div>
+    </body>
+{%endblock%}
