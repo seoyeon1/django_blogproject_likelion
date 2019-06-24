@@ -21,25 +21,22 @@ def detail(request, blog_id):
     return render(request, 'detail.html', {'detail':details})
 
 def new(request):
-    return render(request, 'new.html')
+    form = BlogForm()
+    return render(request, 'new.html', {'form':form})
 
 def create(request):
     if request.method == 'POST':    #입력된 내용을 처리(POST)
         form = BlogForm(request.POST)#POST방식으로 들어온 data를 form에 넣어줌.
         if form.is_valid():
         #is_valid(): 입력돼야할 값이 다 입력됐는지, 형식에 맞게 다 잘 입력됐는지 체크(T/F)
-            blog = form.save(comment = False)
+            blog = form.save(commit = False)
         #form에서 title, body만 입력받고 날짜시간은 함수에서 직접 받을예정. So, blog객체를 가져옴:O & 바로 save:X
             blog.pub_date = timezone.datetime.now()#현재 날짜&시간(form에서 입력 받지 않았음)
             blog.save() #save
-            return redirect('detail' + str(blog.id))
-
-    else:    #POST방식이 아닐경우, 잘못된 접근이라는 메시지를 보여줌.
-        return HttpResponse('잘못된 접근입니다.')
-
-    #빈 page를 보여줌(GET)
-    #     form = BlogForm()#form에 빈 객체를 담음.
-    # return render(request, 'blog/create.html', {'form':form})
+            #return redirect('detail',blog_id =blog.id) 같은 의미
+            return redirect('/blog/'+ str(blog.id))
+            
+    return HttpResponse('잘못된 접근')    
     #요청이 들어오면 빈 입력공간(form)을 보내줌.(사전형태)
     
 
@@ -52,13 +49,13 @@ def edit(request, blog_id):
             form = BlogForm(request.POST, instance=blog)
             #form에서 blog객체의 title, body만 입력받고 날짜시간은 함수에서 직접 받을예정.
             if form.is_valid():     #입력값 체크
-                blog = form.save(comment = False)   #So, blog객체를 가져옴:O & 바로 save:X
+                blog = form.save(commit = False)   #So, blog객체를 가져옴:O & 바로 save:X
                 blog.pub_date = timezone.datetime.now()#현재 날짜&시간(form에서 입력 받지 않았음)
                 blog.save() # 수정한 글 save
-                return redirect('detail', pk=blog.pk)
+                return redirect('/blog/' + str(blog_id))
     else:
         form = BlogForm(instance=blog)
-    return render(request, 'blog/edit.html', {'form':form})
+    return render(request, 'edit.html', {'form':form, 'blog':blog})
     #요청이 들어오면 빈 입력공간(form)을 보내줌.(사전형태)
 
 
