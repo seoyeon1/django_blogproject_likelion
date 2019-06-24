@@ -6,4 +6,4 @@ from .models import Blog
 class BlogForm(forms.ModelForm):    #model 기반 입력공간
     class Meta:     #inner class(기반 model, model의 어떤 항목들을 입력받을지)
         model = Blog    #기반 model(=Blog)
-        fields = ('title', 'body')   #입력받을 항목들(시간,날짜는 views에서 직접 받을 예정)
+        fields = ['title', 'body']   #입력받을 항목들(시간,날짜는 views에서 직접 받을 예정)
